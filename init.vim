@@ -21,10 +21,6 @@ set foldtext=CustomFoldText()
 let g:spacevim_enable_statusline_mode = 1
 let g:spacevim_relativenumber = 0
 
-let g:spacevim_filetree_direction = 'right'
-
-let g:spacevim_plugin_manager = 'dein'
-
 let g:spacevim_vimcompatible = 0
 
 let g:spacevim_max_column   = 80
@@ -194,6 +190,7 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 " Overide F3 to open neo-tree
 noremap <silent> <F3> :NeoTreeRevealToggle<CR>
+nnoremap <buffer> <M-CR> :lua vim.lsp.buf.code_action()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -301,7 +298,7 @@ let g:spacevim_custom_plugins = [
     \ ['kdheepak/lazygit.nvim'],
     \ ['jose-elias-alvarez/null-ls.nvim'],
     \ ['nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}],
-    \ ['nvim-lua/plenary.nvim'],
+    \ ['nvim-lua/plenary.nvim', { 'module' : 'plenary' }],
     \ ['kyazdani42/nvim-web-devicons'],
     \ ['MunifTanjim/nui.nvim'],
     \ ['nvim-neo-tree/neo-tree.nvim']
@@ -327,5 +324,6 @@ let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not inst
 call SpaceVim#custom#SPC('nore', ['g', 'g'], 'LazyGit', 'Lazygit', 1)
 call SpaceVim#custom#SPC('nnoremap', ['f', 't'], 'NeoTreeRevealToggle', 'toggle-file-tree', 1)
 call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'Neotree', 'show-file-tree', 1)
+call SpaceVim#custom#SPC('nnoremap', ['l', 'a'], 'Code actions', 'lua vim.lsp.buf.code_action', 1)
 
 " ############## Custom Plugins Setting in SpaceVim End  ########################

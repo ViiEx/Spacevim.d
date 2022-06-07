@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 function! myspacevim#after() abort
 lua << EOF
 require("neo-tree").setup({
@@ -58,8 +60,8 @@ require("neo-tree").setup({
 		},
 	},
 	window = {
-		position = "left",
-		width = 40,
+		position = "right",
+		width = 30,
 		mapping_options = {
 			noremap = true,
 			nowait = true,
