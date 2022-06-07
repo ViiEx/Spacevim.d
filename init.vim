@@ -11,6 +11,8 @@ nmap <leader>y "+y
 
 filetype plugin indent on
 
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 set foldlevel=99
 set fillchars=fold:\
 set foldtext=CustomFoldText()
@@ -19,10 +21,6 @@ set foldtext=CustomFoldText()
 let g:spacevim_enable_statusline_mode = 1
 let g:spacevim_relativenumber = 0
 
-let g:spacevim_colorscheme = 'sonokai'
-let g:spacevim_colorscheme_bg = 'dark'
-
-let g:spacevim_filemanager = 'neotree'
 let g:spacevim_filetree_direction = 'right'
 
 let g:spacevim_plugin_manager = 'dein'
@@ -80,7 +78,7 @@ let g:spacevim_filemanager = 'nerdtree'
 let g:spacevim_plugin_bundle_dir = '~/.cache/vimfiles'
 
 " Set SpaceVim colorscheme
-let g:spacevim_colorscheme = 'onedark'
+let g:spacevim_colorscheme = 'sonokai'
 let g:spacevim_colorscheme_bg = 'dark'
 
 let g:spacevim_statusline_separator = 'arrow'
@@ -107,6 +105,8 @@ let g:neoformat_enabled_javascriptreact = ['prettier']
 
 let g:spacevim_github_username = 'ViiEx'
 
+let g:spacevim_bootstrap_bofore = myspacevim#after()
+
 
 " Load core layers
 call SpaceVim#layers#load('incsearch')
@@ -122,14 +122,18 @@ call SpaceVim#layers#load('git')
 call SpaceVim#layers#load('github')
 call SpaceVim#layers#load('format')
 call SpaceVim#layers#load('mail')
+call SpaceVim#layers#load('lsp')
+call SpaceVim#layers#load('format')
 
+call SpaceVim#layers#load('format', {'format_on_save' : 'true'})
+
+" Core layers configuration
 call SpaceVim#layers#load('shell',
     \ {
     \  'default_position' : 'bottom',
     \  'default_height' : 30,
     \ }
     \ )
-
 
 " Language Layers
 call SpaceVim#layers#load('lang#html5')
@@ -187,6 +191,9 @@ nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" Overide F3 to open neo-tree
+noremap <silent> <F3> :NeoTreeRevealToggle<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -282,6 +289,7 @@ let g:vimtex_view_automatic = 0
 
 " ############## Extra Plugins Setting End   ########################
 
+let g:spacevim_disabled_plugins = ['nerdtree']
 
 " ############## Custom Plugins in SpaceVim Start ########################
 let g:spacevim_custom_plugins = [
@@ -292,13 +300,17 @@ let g:spacevim_custom_plugins = [
     \ ['lilydjwg/colorizer'],
     \ ['kdheepak/lazygit.nvim'],
     \ ['jose-elias-alvarez/null-ls.nvim'],
-    \ ['nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}]
+    \ ['nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}],
+    \ ['nvim-lua/plenary.nvim'],
+    \ ['kyazdani42/nvim-web-devicons'],
+    \ ['MunifTanjim/nui.nvim'],
+    \ ['nvim-neo-tree/neo-tree.nvim']
     \ ]
 " ############## Custom Plugins in SpaceVim End   ########################
 
 
 " ############## Custom Plugins Setting in SpaceVim Start ########################
-let g:sonokai_style = 'default'
+let g:sonokai_style = 'andromeda'
 let g:sonokai_better_performance = 1
 let g:indentLine_setConceal = 0 " This is a bug: https://github.com/SpaceVim/SpaceVim/issues/4268
 " let g:vim_markdown_conceal = 0
@@ -313,33 +325,7 @@ let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not inst
 " nnoremap <silent> <leader>gg :LazyGit<CR>
 
 call SpaceVim#custom#SPC('nore', ['g', 'g'], 'LazyGit', 'Lazygit', 1)
-
-lua << EOF
-  local null_ls = require('null-ls')
-  require("null-ls").setup({
-    sources = {
-      null_ls.builtins.formatting.rufo,
-      null_ls.builtins.code_actions.gitsigns,
-      null_ls.builtins.code_actions.shellcheck,
-      null_ls.builtins.formatting.stylua,
-      null_ls.builtins.formatting.black,
-      null_ls.builtins.formatting.isort,
-      null_ls.builtins.formatting.prettier.with { extra_filetypes = { "rmd" } },
-      null_ls.builtins.formatting.shfmt,
-      null_ls.builtins.diagnostics.cue_fmt,
-      null_ls.builtins.diagnostics.shellcheck,
-      null_ls.builtins.diagnostics.rubocop,
-    },
-    config.on_attach = function(client)
-      if client.resolved_capabilities.document_formatting then
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          desc = "Auto format before save",
-          pattern = "<buffer>",
-          callback = vim.lsp.buf.formatting_sync,
-        })
-      end,
-    end
-  })
-EOF
+call SpaceVim#custom#SPC('nnoremap', ['f', 't'], 'NeoTreeRevealToggle', 'toggle-file-tree', 1)
+call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'Neotree', 'show-file-tree', 1)
 
 " ############## Custom Plugins Setting in SpaceVim End  ########################
