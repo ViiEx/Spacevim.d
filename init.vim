@@ -16,6 +16,10 @@ set foldexpr=nvim_treesitter#foldexpr()
 set foldlevel=99
 set fillchars=fold:\
 set foldtext=CustomFoldText()
+set formatoptions+=m
+set formatoptions+=B
+
+au BufRead,BufNewFile *.fish setfiletype sh
 
 " ############## Default Setting End   ########################
 let g:spacevim_enable_statusline_mode = 1
@@ -101,8 +105,57 @@ let g:neoformat_enabled_javascriptreact = ['prettier']
 
 let g:spacevim_github_username = 'ViiEx'
 
-"let g:spacevim_bootstrap_bofore = myspacevim#after()
+let g:mkdp_path_to_chrome = 'google-chrome-stable'
+let g:mkdp_auto_start = 0
+let vim_markdown_preview_github=1
+let vim_markdown_preview_use_xdg_open=1
 
+let g:neoformat_cpp_clangformat = {
+            \ 'exe': 'clang-format',
+            \ 'args': ['-style=file'],
+            \ 'stdin': 1,
+            \ }
+
+let g:spacevim_disabled_plugins = ['nerdtree']
+
+" Disable linting for all fish files.
+let g:ale_pattern_options = {'\.fish$': {'ale_enabled': 0}}
+" Disable not-so-smart chktex
+let g:ale_tex_chktex_executable = ''
+let g:vimtex_quickfix_enabled = 0
+" Disable all syntax conceal
+let g:vimtex_syntax_conceal_disable = 1
+" Disable automatic view since I use texlab with skim to preview in background
+" personally
+let g:vimtex_view_enabled = 0
+let g:vimtex_view_automatic = 0
+
+let g:coc_config_home = '~/.SpaceVim.d/'
+let g:coc_global_extensions = [
+      \ 'coc-go', 
+      \ 'coc-rust-analyzer',
+      \ 'coc-sh', 
+      \ 'coc-vimlsp',
+      \ 'coc-dictionary',
+      \ 'coc-word',
+      \ 'coc-texlab',
+      \ 'coc-json',
+      \ 'coc-tsserver',
+      \ 'coc-snippets',
+      \ 'coc-tslint'
+      \ ]
+
+let g:sonokai_style = 'andromeda'
+let g:sonokai_better_performance = 1
+let g:indentLine_setConceal = 0 " This is a bug: https://github.com/SpaceVim/SpaceVim/issues/4268
+" let g:vim_markdown_conceal = 0
+" let g:markdown_syntax_conceal = 0
+" set conceallevel=2
+let g:lazygit_floating_window_winblend = 0 " transparency of floating window
+let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating window
+let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
+let g:lazygit_floating_window_use_plenary = 0 " use plenary.nvim to manage floating window if available
+let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not installed
 
 " Load core layers
 call SpaceVim#layers#load('incsearch')
@@ -156,137 +209,15 @@ call SpaceVim#layers#load('lang#xml')
 call SpaceVim#layers#load('lang#json')
 call SpaceVim#layers#load('lang#Dockerfile')
 
-
-" ############## Embedded Plugins Setting Start ########################
-" {{ coc {{
-let g:coc_config_home = '~/.SpaceVim.d/'
-let g:coc_global_extensions = [
-      \ 'coc-go', 
-      \ 'coc-rust-analyzer',
-      \ 'coc-sh', 
-      \ 'coc-vimlsp',
-      \ 'coc-dictionary',
-      \ 'coc-word',
-      \ 'coc-texlab',
-      \ 'coc-json',
-      \ 'coc-tsserver',
-      \ 'coc-snippets',
-      \ 'coc-tslint'
-      \ ]
-
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-" Overide F3 to open neo-tree
-noremap <silent> <F3> :NeoTreeRevealToggle<CR>
-nnoremap <buffer> <M-CR> :lua vim.lsp.buf.code_action()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+" ############## Custom Functions Start ################
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    call feedkeys('K', 'in')
   endif
 endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
-
-" Formatting selected code.
-" `<leader>f` already taken by SpaceVim 
-" xmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
-" }} coc }}
-
-" {{ vim_markdown {{
-let g:mkdp_path_to_chrome = 'google-chrome-stable'
-let g:mkdp_auto_start = 0
-let vim_markdown_preview_github=1
-let vim_markdown_preview_use_xdg_open=1
-" }} vim_markdown }}
-
-" {{ Neoformat {{ Auto format on save
-"augroup fmt autocmd! autocmd BufWritePre * undojoin | Neoformat augroup END
-
-let g:neoformat_cpp_clangformat = {
-            \ 'exe': 'clang-format',
-            \ 'args': ['-style=file'],
-            \ 'stdin': 1,
-            \ }
-" }} Neoformat }}
-
-" {{ ale {{
-" setting below is not necessary when dag/vim-fish is enabled
-au BufRead,BufNewFile *.fish setfiletype sh
-" Disable linting for all fish files.
-let g:ale_pattern_options = {'\.fish$': {'ale_enabled': 0}}
-" Disable not-so-smart chktex
-let g:ale_tex_chktex_executable = ''
-"autocmd FileType fish let g:ale_sh_shell_default_shell='fish'
-" }} ale }}
-
-" {{ vimtex {{
-
-" If you use Asian language to write latex, you may want these config like I
-" do.
-" break at a multi-byte character above 255
-" check `:help fo-table`
-set formatoptions+=m
-" no spaces when merge multiple lines of chinese 
-" FYI: https://www.reddit.com/r/vim/comments/7566at/how_to_use_set_wrap_for_chinese/
-set formatoptions+=B
-
-" Special setting for latex files
-" Use `gggqG` to format long lines in Latex
-" Use `gq11j` to wrap the line you're on with the 11 below it
-" Use `gqip` or `gqap` to wrap the paragraph
-" gg(go to first line), gq(format) to G(the last line)
-autocmd FileType tex setlocal colorcolumn=80 textwidth=79 tabstop=2 shiftwidth=2 expandtab
-nnoremap <leader>v gqip
-" See: http://vimdoc.sourceforge.net/htmldoc/syntax.html#g:tex_conceal
-" let g:tex_conceal = "abdg"
-
-let g:vimtex_quickfix_enabled = 0
-
-" Disable all syntax conceal
-let g:vimtex_syntax_conceal_disable = 1
-" Disable automatic view since I use texlab with skim to preview in background
-" personally
-let g:vimtex_view_enabled = 0
-let g:vimtex_view_automatic = 0
-" }} vimtex }}
-" ############## Embedded Plugins Setting End   ########################
-
-
-" ############## Extra Plugins Setting Start ########################
-
-" ############## Extra Plugins Setting End   ########################
-
-let g:spacevim_disabled_plugins = ['nerdtree']
+" ############### Custom Functions End ##################
 
 " ############## Custom Plugins in SpaceVim Start ########################
 let g:spacevim_custom_plugins = [
@@ -305,29 +236,50 @@ let g:spacevim_custom_plugins = [
     \ ]
 " ############## Custom Plugins in SpaceVim End   ########################
 
-
-" ############## Custom Plugins Setting in SpaceVim Start ########################
-let g:sonokai_style = 'andromeda'
-let g:sonokai_better_performance = 1
-let g:indentLine_setConceal = 0 " This is a bug: https://github.com/SpaceVim/SpaceVim/issues/4268
-" let g:vim_markdown_conceal = 0
-" let g:markdown_syntax_conceal = 0
-" set conceallevel=2
-let g:lazygit_floating_window_winblend = 0 " transparency of floating window
-let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating window
-let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
-let g:lazygit_floating_window_use_plenary = 0 " use plenary.nvim to manage floating window if available
-let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not installed
-" Lazygit map
-" nnoremap <silent> <leader>gg :LazyGit<CR>
-
+" ############## Custom Mapping Settings for SpaceVim Start ##############
 call SpaceVim#custom#SPC('nore', ['g', 'g'], 'LazyGit', 'Lazygit', 1)
 call SpaceVim#custom#SPC('nnoremap', ['f', 't'], 'NeoTreeRevealToggle', 'toggle-file-tree', 1)
 call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'Neotree', 'show-file-tree', 1)
 call SpaceVim#custom#SPC('nnoremap', ['l', 'a'], 'Code actions', 'lua vim.lsp.buf.code_action', 1)
 
-" ############## Custom Plugins Setting in SpaceVim End  ########################
+nnoremap <leader>v gqip
 
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
 
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Overide F3 to open neo-tree
+noremap <silent> <F3> :NeoTreeRevealToggle<CR>
+nnoremap <buffer> <M-CR> :lua vim.lsp.buf.code_action()<CR>
+
+" ############## Custom Mapping Settings for SpaceVim End #############
+
+" ############## Auto Cmds Start ###############
 autocmd VimEnter * Neotree filesystem reveal right .
 autocmd VimEnter * call myspacevim#after()
+autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd FileType tex setlocal colorcolumn=80 textwidth=79 tabstop=2 shiftwidth=2 expandtab
+
+" ############# Auto Cmds End   ########################
