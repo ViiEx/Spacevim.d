@@ -101,7 +101,7 @@ let g:neoformat_enabled_javascriptreact = ['prettier']
 
 let g:spacevim_github_username = 'ViiEx'
 
-let g:spacevim_bootstrap_bofore = myspacevim#after()
+"let g:spacevim_bootstrap_bofore = myspacevim#after()
 
 
 " Load core layers
@@ -327,3 +327,7 @@ call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'Neotree', 'show-file-tree', 1)
 call SpaceVim#custom#SPC('nnoremap', ['l', 'a'], 'Code actions', 'lua vim.lsp.buf.code_action', 1)
 
 " ############## Custom Plugins Setting in SpaceVim End  ########################
+
+
+autocmd VimEnter * Neotree filesystem reveal right .
+autocmd VimEnter * call myspacevim#after()

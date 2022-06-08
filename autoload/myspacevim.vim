@@ -72,12 +72,12 @@ require("neo-tree").setup({
 				nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
 			},
 			["<2-LeftMouse>"] = "open",
-			["<cr>"] = "open",
+			["<cr>"] = "open_tabnew",
 			["S"] = "open_split",
 			["s"] = "open_vsplit",
 			-- ["S"] = "split_with_window_picker",
 			-- ["s"] = "vsplit_with_window_picker",
-			["t"] = "open_tabnew",
+			["t"] = "open",
 			["w"] = "open_with_window_picker",
 			["C"] = "close_node",
 			["a"] = {
@@ -131,8 +131,8 @@ require("neo-tree").setup({
 		window = {
 			mappings = {
 				["<bs>"] = "navigate_up",
-				["."] = "set_root",
-				["H"] = "toggle_hidden",
+				["H"] = "set_root",
+				["."] = "toggle_hidden",
 				["/"] = "fuzzy_finder",
 				["f"] = "filter_on_submit",
 				["<c-x>"] = "clear_filter",
