@@ -19,7 +19,7 @@ Here is the configuration sections broken into categories to help the organizati
 
 Here I'm having all the default settings for the `vim`
 
-```vimscript
+```vim 
 set wrap
 set guifont=JetBrainsMonoForPowerline-Regular:h20
 nmap <leader>y "+y
@@ -41,7 +41,7 @@ au BufRead,BufNewFile *.fish setfiletype sh
 
 Here is the options for `SpaceVim` and the plugins I have isntalled.
 
-```vimscript
+```vim
 let g:spacevim_enable_statusline_mode = 1
 let g:spacevim_relativenumber = 0
 
@@ -180,7 +180,7 @@ let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not inst
 
 Here a have all the layers I need to enable
 
-```vimscript
+```vim
 call SpaceVim#layers#load('incsearch')
 call SpaceVim#layers#load('shell') 
 call SpaceVim#layers#load('tools#screensaver')
@@ -239,7 +239,7 @@ This section someone could argue that needs to be in the `Options` but
 I feel that it brings to much to the table to have it there so it has
 it's own section here.
 
-```vimscript
+```vim
 let g:spacevim_custom_plugins = [
     \ ['machakann/vim-highlightedyank'],
     \ ['iloginow/vim-stylus'],
@@ -259,7 +259,7 @@ let g:spacevim_custom_plugins = [
 
 The list with my mappings
 
-```vimscript
+```vim
 call SpaceVim#custom#SPC('nore', ['g', 'g'], 'LazyGit', 'Lazygit', 1)
 call SpaceVim#custom#SPC('nnoremap', ['l', 'a'], 'Code actions', 'lua vim.lsp.buf.code_action', 1)
 
@@ -296,7 +296,7 @@ nmap <silent> gr <Plug>(coc-references)
 
 A list with commands I want to be executed in few situations
 
-```vimscript
+```vim
 autocmd CursorHold * silent call CocActionAsync('highlight')
 autocmd FileType tex setlocal colorcolumn=80 textwidth=79 tabstop=2 shiftwidth=2 expandtab
 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
