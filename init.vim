@@ -1,25 +1,10 @@
-# SpaceVim Configuration
+scriptencoding utf-8
+" ================================================ "
+" *               Config By: ViiEx                 "
+" *                                                "
+" ================================================ "
 
-This is my SpaceVim configuration file. 
-I used to have the configuration made for `NeoVim` but I have migrated to `Astro` for it so I'm keeping this configuration for normal `vim`.
-
-The migration is still in progress so not everthing will work.
-
-## Few things
-
-- This set up is all written in `vimscript` in order to have more freedom in the configuration.
-- `Vim` must be compiled with support for `python`, `python3` and `lua` if you don't want to be
-bombared with errors.
-
-## Config Sections
-
-Here is the configuration sections broken into categories to help the organization of the file.
-
-### Settings
-
-Here I'm having all the default settings for the `vim`
-
-```vim 
+" ############## Default Setting Start ########################
 set wrap
 set guifont=JetBrainsMonoForPowerline-Regular:h20
 nmap <leader>y "+y
@@ -35,13 +20,8 @@ set formatoptions+=m
 set formatoptions+=B
 
 au BufRead,BufNewFile *.fish setfiletype sh
-```
 
-### Options
-
-Here is the options for `SpaceVim` and the plugins I have isntalled.
-
-```vim
+" ############## Default Setting End   ########################
 let g:spacevim_enable_statusline_mode = 1
 let g:spacevim_relativenumber = 0
 
@@ -174,13 +154,8 @@ let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating
 let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
 let g:lazygit_floating_window_use_plenary = 0 " use plenary.nvim to manage floating window if available
 let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not installed
-```
 
-### My layers
-
-Here a have all the layers I need to enable
-
-```vim
+" Load core layers
 call SpaceVim#layers#load('incsearch')
 call SpaceVim#layers#load('shell') 
 call SpaceVim#layers#load('tools#screensaver')
@@ -231,15 +206,18 @@ call SpaceVim#layers#load('lang#vim')
 call SpaceVim#layers#load('lang#xml')
 call SpaceVim#layers#load('lang#json')
 call SpaceVim#layers#load('lang#Dockerfile')
-```
 
-### Custom plugins
+" ############## Custom Functions Start ################
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+" ############### Custom Functions End ##################
 
-This section someone could argue that needs to be in the `Options` but
-I feel that it brings to much to the table to have it there so it has
-it's own section here.
-
-```vim
+" ############## Custom Plugins in SpaceVim Start ########################
 let g:spacevim_custom_plugins = [
     \ ['machakann/vim-highlightedyank'],
     \ ['iloginow/vim-stylus'],
@@ -253,13 +231,9 @@ let g:spacevim_custom_plugins = [
     \ ['kyazdani42/nvim-web-devicons'],
     \ ['MunifTanjim/nui.nvim'],
     \ ]
-```
+" ############## Custom Plugins in SpaceVim End   ########################
 
-### Mappings
-
-The list with my mappings
-
-```vim
+" ############## Custom Mapping Settings for SpaceVim Start ##############
 call SpaceVim#custom#SPC('nore', ['g', 'g'], 'LazyGit', 'Lazygit', 1)
 call SpaceVim#custom#SPC('nnoremap', ['l', 'a'], 'Code actions', 'lua vim.lsp.buf.code_action', 1)
 
@@ -290,15 +264,11 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-```
 
-### AutoCmd
+" ############## Custom Mapping Settings for SpaceVim End #############
 
-A list with commands I want to be executed in few situations
-
-```vim
+" ############## Auto Cmds Start ###############
 autocmd CursorHold * silent call CocActionAsync('highlight')
 autocmd FileType tex setlocal colorcolumn=80 textwidth=79 tabstop=2 shiftwidth=2 expandtab
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-```
-
+ autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" ############# Auto Cmds End   ########################
