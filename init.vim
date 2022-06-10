@@ -25,7 +25,7 @@ au BufRead,BufNewFile *.fish setfiletype sh
 let g:spacevim_enable_statusline_mode = 1
 let g:spacevim_relativenumber = 0
 
-let g:spacevim_vimcompatible = 0
+let g:spacevim_vimcompatible = 1
 
 let g:spacevim_max_column   = 80
 
@@ -115,8 +115,6 @@ let g:neoformat_cpp_clangformat = {
             \ 'args': ['-style=file'],
             \ 'stdin': 1,
             \ }
-
-let g:spacevim_disabled_plugins = ['nerdtree']
 
 " Disable linting for all fish files.
 let g:ale_pattern_options = {'\.fish$': {'ale_enabled': 0}}
@@ -232,14 +230,11 @@ let g:spacevim_custom_plugins = [
     \ ['nvim-lua/plenary.nvim', { 'module' : 'plenary' }],
     \ ['kyazdani42/nvim-web-devicons'],
     \ ['MunifTanjim/nui.nvim'],
-    \ ['nvim-neo-tree/neo-tree.nvim']
     \ ]
 " ############## Custom Plugins in SpaceVim End   ########################
 
 " ############## Custom Mapping Settings for SpaceVim Start ##############
 call SpaceVim#custom#SPC('nore', ['g', 'g'], 'LazyGit', 'Lazygit', 1)
-call SpaceVim#custom#SPC('nnoremap', ['f', 't'], 'NeoTreeRevealToggle', 'toggle-file-tree', 1)
-call SpaceVim#custom#SPC('nnoremap', ['f', 'T'], 'Neotree', 'show-file-tree', 1)
 call SpaceVim#custom#SPC('nnoremap', ['l', 'a'], 'Code actions', 'lua vim.lsp.buf.code_action', 1)
 
 nnoremap <leader>v gqip
@@ -270,16 +265,10 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Overide F3 to open neo-tree
-noremap <silent> <F3> :NeoTreeRevealToggle<CR>
-nnoremap <buffer> <M-CR> :lua vim.lsp.buf.code_action()<CR>
-
 " ############## Custom Mapping Settings for SpaceVim End #############
 
 " ############## Auto Cmds Start ###############
-autocmd VimEnter * Neotree filesystem reveal right .
-autocmd VimEnter * call myspacevim#after()
 autocmd CursorHold * silent call CocActionAsync('highlight')
 autocmd FileType tex setlocal colorcolumn=80 textwidth=79 tabstop=2 shiftwidth=2 expandtab
-
+ autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 " ############# Auto Cmds End   ########################
