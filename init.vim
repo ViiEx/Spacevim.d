@@ -6,13 +6,12 @@ scriptencoding utf-8
 
 " ############## Default Setting Start ########################
 set wrap
-set guifont=JetBrainsMonoForPowerline-Regular:h20
 nmap <leader>y "+y
 
 filetype plugin indent on
 
 set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+set foldexpr=syntax
 set foldlevel=99
 set fillchars=fold:\
 set foldtext=CustomFoldText()
@@ -78,7 +77,7 @@ let g:spacevim_filemanager = 'nerdtree'
 let g:spacevim_plugin_bundle_dir = '~/.cache/vimfiles'
 
 " Set SpaceVim colorscheme
-let g:spacevim_colorscheme = 'sonokai'
+let g:spacevim_colorscheme = 'gruvbox'
 let g:spacevim_colorscheme_bg = 'dark'
 
 let g:spacevim_statusline_separator = 'arrow'
@@ -149,11 +148,6 @@ let g:indentLine_setConceal = 0 " This is a bug: https://github.com/SpaceVim/Spa
 " let g:vim_markdown_conceal = 0
 " let g:markdown_syntax_conceal = 0
 " set conceallevel=2
-let g:lazygit_floating_window_winblend = 0 " transparency of floating window
-let g:lazygit_floating_window_scaling_factor = 0.9 " scaling factor for floating window
-let g:lazygit_floating_window_corner_chars = ['╭', '╮', '╰', '╯'] " customize lazygit popup window corner characters
-let g:lazygit_floating_window_use_plenary = 0 " use plenary.nvim to manage floating window if available
-let g:lazygit_use_neovim_remote = 1 " fallback to 0 if neovim-remote is not installed
 
 " Load core layers
 call SpaceVim#layers#load('incsearch')
@@ -224,17 +218,13 @@ let g:spacevim_custom_plugins = [
     \ ['sainnhe/sonokai'],
     \ ['sheerun/vim-polyglot'],
     \ ['lilydjwg/colorizer'],
-    \ ['kdheepak/lazygit.nvim'],
-    \ ['jose-elias-alvarez/null-ls.nvim'],
-    \ ['nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}],
-    \ ['nvim-lua/plenary.nvim', { 'module' : 'plenary' }],
-    \ ['kyazdani42/nvim-web-devicons'],
-    \ ['MunifTanjim/nui.nvim'],
+    \ ['jceb/vim-orgmode'],
+    \ ['voldikss/vim-floaterm']
     \ ]
 " ############## Custom Plugins in SpaceVim End   ########################
 
 " ############## Custom Mapping Settings for SpaceVim Start ##############
-call SpaceVim#custom#SPC('nore', ['g', 'g'], 'LazyGit', 'Lazygit', 1)
+call SpaceVim#custom#SPC('nore', ['g', 'g'], 'FloatermNew lazygit', 'Lazygit', 1)
 call SpaceVim#custom#SPC('nnoremap', ['l', 'a'], 'Code actions', 'lua vim.lsp.buf.code_action', 1)
 
 nnoremap <leader>v gqip
