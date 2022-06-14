@@ -1,9 +1,7 @@
 # SpaceVim Configuration
 
 This is my SpaceVim configuration file. 
-I used to have the configuration made for `NeoVim` but I have migrated to `Astro` for it so I'm keeping this configuration for normal `vim`.
-
-The migration is still in progress so not everthing will work.
+It is still in progress so not everthing will work.
 
 ## Few things
 
